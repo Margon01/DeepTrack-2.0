@@ -96,7 +96,7 @@ def ConvolutionalBlock(
 
     def Layer(filters, **kwargs_inner):
         kwargs_inner.update(kwargs)
-        layer = layers.Conv2D(
+        layer = layers.ConvLSTM2D(
             filters,
             kernel_size=kernel_size,
             padding=padding,
