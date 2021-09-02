@@ -51,7 +51,7 @@ def _single_layer_call(x, layer, instance_norm, activation):
     if instance_norm:
         if not isinstance(instance_norm, dict):
             instance_norm = {}
-        y = InstanceNormalization(**instance_norm)(y)
+        y = layers.TimeDistributed(InstanceNormalization(**instance_norm))(y)
 
     if activation:
         y = _as_activation(activation)(y)
@@ -167,9 +167,9 @@ def PoolingBlock(
 
     def Layer(filters=None, **kwargs_inner):
         kwargs_inner.update(kwargs)
-        layer = layers.MaxPool2D(
+        layer = layers.TimeDistributed(layers.MaxPool2D(
             pool_size=pool_size, padding=padding, strides=strides, **kwargs_inner
-        )
+        ))
         return lambda x: _single_layer_call(
             x, layer, _instance_norm(instance_norm, filters), activation
         )
@@ -252,13 +252,14 @@ def StaticUpsampleBlock(
 
     def Layer(filters, **kwargs_inner):
         kwargs_inner.update(kwargs)
-        layer = layers.UpSampling2D(size=size, interpolation=interpolation)
+        layer = layers.TimeDistributed(layers.UpSampling2D(size=size, interpolation=interpolation))
 
-        conv = layers.Conv2D(
+        conv = layers.ConvLSTM2D(
             filters,
             kernel_size=kernel_size,
             strides=strides,
             padding=padding,
+            return_sequences = True,
             **kwargs_inner
         )
 
