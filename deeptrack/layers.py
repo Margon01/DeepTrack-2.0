@@ -102,6 +102,7 @@ def ConvolutionalBlock(
             padding=padding,
             strides=strides,
             return_sequences=True,
+            data_format='channels_last' ,
             **kwargs_inner
         )
         return lambda x: _single_layer_call(
