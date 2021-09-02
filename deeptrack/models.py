@@ -380,11 +380,12 @@ def UNet(
     for conv_layer_dimension in output_conv_layers_dimensions:
         layer = output_convolution_block(conv_layer_dimension)(layer)
 
-    output_layer = layers.Conv2D(
+    output_layer = layers.ConvLSTM2D(
         number_of_outputs,
         kernel_size=output_kernel_size,
         activation=output_activation,
         padding="same",
+        return_sequences =True,
     )(layer)
 
     model = models.Model(unet_input, output_layer)
