@@ -371,8 +371,8 @@ def UNet(
     ):
 
         layer = upsampling_block(conv_layer_dimension)(layer)
-        layer = layers.TimeDistributed(layers.Concatenate(axis=-1))([layer, concat_layer])
-
+       # layer = layers.TimeDistributed(layers.Concatenate(axis=-1))([layer, concat_layer])
+        layer = layers.Concatenate(axis=-1)([layer, concat_layer])
         for _ in range(steps_per_pooling):
             layer = decoder_convolution_block(conv_layer_dimension)(layer)
 
