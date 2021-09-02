@@ -207,13 +207,13 @@ def DeconvolutionalBlock(
 
     def Layer(filters, **kwargs_inner):
         kwargs_inner.update(kwargs)
-        layer = layers.Conv2DTranspose(
+        layer = layers.TimeDistributed(layers.Conv2DTranspose(
             filters,
             kernel_size=kernel_size,
             padding=padding,
             strides=strides,
             **kwargs_inner
-        )
+        ))
         return lambda x: _single_layer_call(
             x, layer, _instance_norm(instance_norm, filters), activation
         )
